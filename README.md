@@ -1,0 +1,1 @@
+## Repository for creating infrastructure for test task of telestax
