@@ -10,7 +10,6 @@ provider "kubernetes" {
   host                   = data.aws_eks_cluster.cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
   token                  = data.aws_eks_cluster_auth.cluster.token
-  # load_config_file       = false
 }
 
 provider "helm" {
@@ -21,6 +20,7 @@ provider "helm" {
   }
 }
 
+# Ingress to connect to the service
 resource "helm_release" "ingress" {
   name       = "eks"
   chart      = "aws-load-balancer-controller"
@@ -40,6 +40,7 @@ resource "aws_iam_policy" "worker_policy" {
   policy = file("${path.module}/iam-policy.json")
 }
 
+# Creating EKS cluster
 module "eks" {
   source                 = "terraform-aws-modules/eks/aws"
   cluster_name           = "${var.cluster_name}-${var.application}-${var.environment}"
